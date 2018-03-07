@@ -1,6 +1,6 @@
 package com.github.superkoh.mvc.web.annotation;
 
-import com.github.superkoh.mvc.web.constant.KProfiles;
+import com.github.superkoh.mvc.config.profile.KProfiles;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

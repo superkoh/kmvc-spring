@@ -2,7 +2,7 @@ package com.github.superkoh.mvc.web.handler;
 
 import com.github.superkoh.mvc.exception.BizException;
 import com.github.superkoh.mvc.exception.BizRuntimeException;
-import com.github.superkoh.mvc.web.constant.KProfiles;
+import com.github.superkoh.mvc.config.profile.KProfiles;
 import com.github.superkoh.mvc.web.exception.NeedGuestException;
 import com.github.superkoh.mvc.web.exception.NotLoginException;
 import com.github.superkoh.mvc.web.response.ErrorRes;

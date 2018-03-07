@@ -1,7 +1,7 @@
 package com.github.superkoh.mvc.web.handler;
 
 import com.github.superkoh.mvc.web.constant.KHttpHeaders;
-import com.github.superkoh.mvc.web.constant.KProfiles;
+import com.github.superkoh.mvc.config.profile.KProfiles;
 import com.github.superkoh.mvc.web.response.BizRes;
 import com.github.superkoh.mvc.web.response.ErrorRes;
 import com.github.superkoh.mvc.web.response.SuccessRes;
