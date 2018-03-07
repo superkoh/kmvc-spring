@@ -1,2 +1,2 @@
-# mvc-spring-boot-starter
+# kmvc-spring
 使用springboot的脚手架
