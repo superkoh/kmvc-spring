@@ -5,7 +5,11 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class PageRes<T extends BizRes> extends SimplePageRes<T> {
 
   private Long totalCnt;
@@ -28,14 +32,6 @@ public class PageRes<T extends BizRes> extends SimplePageRes<T> {
         pageList.getPageSize(),
         pageList.getPageNo(),
         pageList.getTotalCnt());
-  }
-
-  public Long getTotalCnt() {
-    return totalCnt;
-  }
-
-  public void setTotalCnt(Long totalCnt) {
-    this.totalCnt = totalCnt;
   }
 }
 

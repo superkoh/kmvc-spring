@@ -4,8 +4,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.github.superkoh.mvc.exception.BizException;
 import com.github.superkoh.mvc.exception.BizRuntimeException;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(Include.NON_ABSENT)
+@Data
 public class ErrorRes extends BizRes {
 
   private int ok = -1;
@@ -45,29 +49,5 @@ public class ErrorRes extends BizRes {
     if (null == this.msg || this.msg.isEmpty()) {
       this.msg = "系统异常，请稍后重试";
     }
-  }
-
-  public int getOk() {
-    return ok;
-  }
-
-  public void setOk(int ok) {
-    this.ok = ok;
-  }
-
-  public String getMsg() {
-    return msg;
-  }
-
-  public void setMsg(String msg) {
-    this.msg = msg;
-  }
-
-  public String getVd() {
-    return vd;
-  }
-
-  public void setVd(String vd) {
-    this.vd = vd;
   }
 }

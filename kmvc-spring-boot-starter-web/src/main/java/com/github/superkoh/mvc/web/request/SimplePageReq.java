@@ -1,12 +1,16 @@
 package com.github.superkoh.mvc.web.request;
 
-import com.github.superkoh.mvc.type.Page;
+import com.github.superkoh.mvc.lang.BaseObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @ApiModel
-public class SimplePageReq {
+@Data
+public class SimplePageReq extends BaseObject {
 
   @NotNull
   @ApiModelProperty("单页数量")
@@ -14,24 +18,4 @@ public class SimplePageReq {
   @NotNull
   @ApiModelProperty("页码")
   private Integer pageNo = 1;
-
-  public Page toPage() {
-    return new Page(pageSize, pageNo);
-  }
-
-  public Integer getPageSize() {
-    return pageSize;
-  }
-
-  public void setPageSize(Integer pageSize) {
-    this.pageSize = pageSize;
-  }
-
-  public Integer getPageNo() {
-    return pageNo;
-  }
-
-  public void setPageNo(Integer pageNo) {
-    this.pageNo = pageNo;
-  }
 }

@@ -5,7 +5,11 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class SimplePageRes<T extends BizRes> extends ListRes<T> {
 
   private Integer pageSize;
@@ -28,21 +32,5 @@ public class SimplePageRes<T extends BizRes> extends ListRes<T> {
     this(pageList.getList().stream().filter(filter).map(mapper).collect(Collectors.toList()),
         pageList.getPageSize(),
         pageList.getPageNo());
-  }
-
-  public Integer getPageSize() {
-    return pageSize;
-  }
-
-  public void setPageSize(Integer pageSize) {
-    this.pageSize = pageSize;
-  }
-
-  public Integer getPageNo() {
-    return pageNo;
-  }
-
-  public void setPageNo(Integer pageNo) {
-    this.pageNo = pageNo;
   }
 }

@@ -1,5 +1,10 @@
 package com.github.superkoh.mvc.exception;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class BizException extends Exception {
 
   private int errorCode = -1;
@@ -11,13 +16,5 @@ public class BizException extends Exception {
 
   public BizException(String message) {
     super(message);
-  }
-
-  public int getErrorCode() {
-    return errorCode;
-  }
-
-  public void setErrorCode(int errorCode) {
-    this.errorCode = errorCode;
   }
 }
