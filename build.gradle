@@ -1,4 +1,5 @@
 allprojects {
+
     apply plugin: 'java'
     apply plugin: 'maven-publish'
 
@@ -6,6 +7,10 @@ allprojects {
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
+
+    ext {
+        springVersion='2.0.0.RELEASE'
+    }
 
     repositories {
         mavenLocal()
