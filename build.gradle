@@ -1,0 +1,32 @@
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+
+    version '1.0.0'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenLocal()
+        maven {
+            url "http://maven.aliyun.com/nexus/content/groups/public/"
+        }
+        mavenCentral()
+        jcenter()
+    }
+}
+
+subprojects {
+    task sourceJar(type: Jar) {
+        from sourceSets.main.allJava
+    }
+
+    publishing {
+        repositories {
+            maven {
+                url "file:///Users/KOH/Projects/superkoh/com.github.superkoh/maven"
+            }
+        }
+    }
+}
