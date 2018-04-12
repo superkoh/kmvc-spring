@@ -17,8 +17,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.experimental.var;
-import lombok.val;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +46,7 @@ public class LogFilter implements Filter {
   }
 
   private static String parseParams(Map<String, String[]> paramMap) {
-    val builder = new StringBuilder();
+    StringBuilder builder = new StringBuilder();
     for (String key : paramMap.keySet()) {
       addLogKV(builder, key, Arrays.toString(paramMap.get(key)));
     }
@@ -67,16 +65,18 @@ public class LogFilter implements Filter {
     if (!(request instanceof HttpServletRequest)) {
       return;
     }
-    val wrapperRequest = new ContentCachingRequestWrapper((HttpServletRequest) request);
-    val wrapperResponse = new ContentCachingResponseWrapper((HttpServletResponse) response);
-    var ua = wrapperRequest.getHeader("User-Agent");
+    ContentCachingRequestWrapper wrapperRequest = new ContentCachingRequestWrapper(
+        (HttpServletRequest) request);
+    ContentCachingResponseWrapper wrapperResponse = new ContentCachingResponseWrapper(
+        (HttpServletResponse) response);
+    String ua = wrapperRequest.getHeader("User-Agent");
     ua = null == ua ? "" : ua;
     if (ua.equals("KeepAliveClient") || HttpMethod.HEAD.matches(wrapperRequest.getMethod())) {
       chain.doFilter(wrapperRequest, wrapperResponse);
       wrapperResponse.copyBodyToResponse();
     } else {
       logFilterInterceptorList.forEach(LogFilterInterceptor::prepare);
-      val accessLogBuilder = new StringBuilder();
+      StringBuilder accessLogBuilder = new StringBuilder();
       long startTime = Instant.now().toEpochMilli();
       chain.doFilter(wrapperRequest, wrapperResponse);
       addLogKV(accessLogBuilder, "request", wrapperRequest.getRequestURI());
@@ -86,11 +86,11 @@ public class LogFilter implements Filter {
       addLogKV(accessLogBuilder, "locale",
           RequestContextUtils.getLocale(wrapperRequest).toLanguageTag());
       addLogKV(accessLogBuilder, "ua", wrapperRequest.getHeader("User-Agent"));
-      val deviceToken = (String) request.getAttribute(KReqAttrs.DEVICE_TOKEN);
+      String deviceToken = (String) request.getAttribute(KReqAttrs.DEVICE_TOKEN);
       if (null != deviceToken) {
         addLogKV(accessLogBuilder, "vd", deviceToken);
       }
-      val loginUser = (LoginUser) request.getAttribute(KReqAttrs.LOGIN_USER);
+      LoginUser loginUser = (LoginUser) request.getAttribute(KReqAttrs.LOGIN_USER);
       if (null != loginUser) {
         addLogKV(accessLogBuilder, "user", String.valueOf(loginUser.getId()));
         addLogKV(accessLogBuilder, "token", loginUser.getToken());
@@ -98,13 +98,13 @@ public class LogFilter implements Filter {
 
       }
       addLogKV(accessLogBuilder, "params", parseParams(wrapperRequest.getParameterMap()));
-      val isPost = "POST".equalsIgnoreCase(wrapperRequest.getMethod());
+      boolean isPost = "POST".equalsIgnoreCase(wrapperRequest.getMethod());
       if (isPost) {
-        var content = wrapperRequest.getContentAsByteArray();
+        byte[] content = wrapperRequest.getContentAsByteArray();
         if (content.length < 1) {
           content = StreamUtils.copyToByteArray(wrapperRequest.getInputStream());
         }
-        val body = IOUtils.toString(content, "UTF-8")
+        String body = IOUtils.toString(content, "UTF-8")
             .replaceAll("\\r\\n", "")
             .replaceAll("\\n", "")
             .replaceAll("\"password\":\"[^\"]*\"",
@@ -122,7 +122,7 @@ public class LogFilter implements Filter {
       logFilterInterceptorList
           .forEach(logFilterInterceptor -> addLogKV(accessLogBuilder, logFilterInterceptor
               .getKey(), logFilterInterceptor.getOutput()));
-      val endTime = Instant.now().toEpochMilli();
+      long endTime = Instant.now().toEpochMilli();
       addLogKV(accessLogBuilder, "duration", String.valueOf(endTime - startTime) + "ms");
       accessLogger.info(accessLogBuilder.toString());
       wrapperResponse.copyBodyToResponse();

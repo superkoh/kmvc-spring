@@ -6,7 +6,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.val;
 import org.springframework.lang.Nullable;
 
 public class KHttpUtils {
@@ -14,7 +13,7 @@ public class KHttpUtils {
   public static String getRemoteIp(ServletRequest request) {
     String ip = null;
     if (request instanceof HttpServletRequest) {
-      val httpReq = (HttpServletRequest) request;
+      HttpServletRequest httpReq = (HttpServletRequest) request;
       ip = httpReq.getHeader("g-remote-ip");
       if (null == ip || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
         ip = httpReq.getHeader("X-Forwarded-For");
@@ -40,9 +39,9 @@ public class KHttpUtils {
 
   @Nullable
   public static String getDeviceTokenCookie(HttpServletRequest request) {
-    val cookies = request.getCookies();
+    Cookie[] cookies = request.getCookies();
     if (null != cookies && cookies.length > 0) {
-      for (val cookie : cookies) {
+      for (Cookie cookie : cookies) {
         if (cookie.getName().equals(KCookies.DEVICE_TOKEN_KEY)) {
           return cookie.getValue();
         }
@@ -53,21 +52,21 @@ public class KHttpUtils {
 
   public static void setDeviceTokenCookie(HttpServletResponse response, String deviceToken) {
     response.setHeader(KHttpHeaders.X_DEVICE_TOKEN, deviceToken);
-    val cookie = new Cookie(KCookies.DEVICE_TOKEN_KEY, deviceToken);
+    Cookie cookie = new Cookie(KCookies.DEVICE_TOKEN_KEY, deviceToken);
     cookie.setPath("/");
     cookie.setMaxAge(36000000);
     response.addCookie(cookie);
   }
 
   public static void setLoginTokenCookie(HttpServletResponse response, String token, int expire) {
-    val cookie = new Cookie(KCookies.TOKEN_KEY, token);
+    Cookie cookie = new Cookie(KCookies.TOKEN_KEY, token);
     cookie.setPath("/");
     cookie.setMaxAge(expire);
     response.addCookie(cookie);
   }
 
   public static void clearLoginTokenCookie(HttpServletResponse response) {
-    val cookie = new Cookie(KCookies.TOKEN_KEY, null);
+    Cookie cookie = new Cookie(KCookies.TOKEN_KEY, null);
     cookie.setPath("/");
     cookie.setMaxAge(0);
     response.addCookie(cookie);

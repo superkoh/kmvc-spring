@@ -4,7 +4,6 @@ import com.github.superkoh.mvc.web.constant.KHttpHeaders;
 import com.github.superkoh.mvc.web.exception.PermissionDeniedException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.val;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -22,8 +21,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
     if (!(handler instanceof HandlerMethod)) {
       return super.preHandle(request, response, handler);
     }
-    val auth = request.getHeader(KHttpHeaders.X_AUTH);
-    if (null == auth || !xAuth.equals(auth)) {
+    if (!xAuth.equals(request.getHeader(KHttpHeaders.X_AUTH))) {
       throw new PermissionDeniedException();
     }
     return super.preHandle(request, response, handler);

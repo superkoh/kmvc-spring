@@ -7,10 +7,11 @@ import com.github.superkoh.mvc.web.exception.NeedGuestException;
 import com.github.superkoh.mvc.web.exception.NotLoginException;
 import com.github.superkoh.mvc.web.response.ErrorRes;
 import com.github.superkoh.mvc.web.utils.KHttpUtils;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import lombok.val;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,10 +66,10 @@ abstract public class AbstractApiExceptionHandler {
   @ResponseBody
   public ErrorRes constraintViolationExceptionHandler(ConstraintViolationException e) {
     response.setStatus(400);
-    val res = new ErrorRes();
-    val violations = e.getConstraintViolations();
+    ErrorRes res = new ErrorRes();
+    Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
     if (!violations.isEmpty()) {
-      val violation = violations.iterator().next();
+      ConstraintViolation violation = violations.iterator().next();
       res.setMsg(((PathImpl) violation.getPropertyPath()).getLeafNode().getName() + " " + violation
           .getMessage());
     }
@@ -79,7 +80,7 @@ abstract public class AbstractApiExceptionHandler {
   @ResponseBody
   public ErrorRes bindExceptionHandler(BindException e) {
     response.setStatus(400);
-    val res = new ErrorRes();
+    ErrorRes res = new ErrorRes();
     if (e.hasFieldErrors()) {
       res.setMsg(e.getFieldError().getField() + " " + e.getFieldError().getDefaultMessage());
       return res;

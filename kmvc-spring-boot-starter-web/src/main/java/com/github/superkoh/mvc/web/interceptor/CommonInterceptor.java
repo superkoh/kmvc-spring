@@ -6,8 +6,6 @@ import com.github.superkoh.mvc.web.utils.KHttpUtils;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.experimental.var;
-import lombok.val;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -19,7 +17,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
     if (!(handler instanceof HandlerMethod)) {
       return super.preHandle(request, response, handler);
     }
-    var deviceToken = request.getHeader(KHttpHeaders.X_DEVICE_TOKEN);
+    String deviceToken = request.getHeader(KHttpHeaders.X_DEVICE_TOKEN);
     if (null == deviceToken || deviceToken.isEmpty()) {
       deviceToken = KHttpUtils.getDeviceTokenCookie(request);
     }

@@ -10,10 +10,10 @@ import com.github.superkoh.mvc.web.exception.NotLoginException;
 import com.github.superkoh.mvc.web.security.LoginUser;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Optional;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.experimental.var;
-import lombok.val;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -31,11 +31,11 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
     if (!(handler instanceof HandlerMethod)) {
       return super.preHandle(request, response, handler);
     }
-    var token = request.getHeader(KHttpHeaders.X_USER_TOKEN);
+    String token = request.getHeader(KHttpHeaders.X_USER_TOKEN);
     if (null == token) {
-      val cookies = request.getCookies();
+      Cookie[] cookies = request.getCookies();
       if (null != cookies) {
-        val oCookie = Arrays.stream(cookies)
+        Optional<Cookie> oCookie = Arrays.stream(cookies)
             .parallel()
             .filter(cookie -> cookie.getName().equals(KCookies.TOKEN_KEY))
             .limit(1)
@@ -52,10 +52,10 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
         if (loginUser.getTokenExpireTime().isBefore(Instant.now())) {
           loginUser = null;
         } else {
-//          String deviceToken = (String) request.getAttribute(XReqAttr.DEVICE_TOKEN);
-//          if (!deviceToken.equals(loginUser.getDeviceToken())) {
-//            loginUser = null;
-//          }
+          String deviceToken = (String) request.getAttribute(KReqAttrs.DEVICE_TOKEN);
+          if (null != loginUser.getDeviceToken() && !deviceToken.equals(loginUser.getDeviceToken())) {
+            loginUser = null;
+          }
         }
       }
       if (null != loginUser) {
@@ -63,14 +63,12 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
       }
     }
 
-
+    HandlerMethod handlerMethod = (HandlerMethod) handler;
     if (null == loginUser) {
-      val handlerMethod = (HandlerMethod) handler;
       if (handlerMethod.getMethod().isAnnotationPresent(LoginRequired.class)) {
         throw new NotLoginException();
       }
     } else {
-      val handlerMethod = (HandlerMethod) handler;
       if (handlerMethod.getMethod().isAnnotationPresent(GuestRequired.class)) {
         throw new NeedGuestException();
       }
