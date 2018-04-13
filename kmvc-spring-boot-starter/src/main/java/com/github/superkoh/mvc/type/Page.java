@@ -15,6 +15,9 @@ public class Page extends BaseObject {
   private int offset;
   private int limit;
 
+  public Page() {
+  }
+
   public Page(int pageSize, int pageNo) {
     this.pageSize = pageSize;
     this.pageNo = pageNo;
