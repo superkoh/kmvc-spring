@@ -2,26 +2,6 @@ plugins {
     id 'io.franzbecker.gradle-lombok' version '1.11'
 }
 
-//group 'com.github.superkoh.mvc'
-
-//publishing {
-//    publications {
-//        mavenJava(MavenPublication) {
-//            groupId group
-//            artifactId 'kmvc-spring-boot-starter-web'
-//            version version
-//
-//            from components.java
-//
-//            artifact sourceJar {
-//                classifier "sources"
-//            }
-//        }
-//    }
-//}
-
-//def springVersion='2.0.0.RELEASE'
-
 dependencies {
     compile project(":kmvc-spring-boot-starter")
     compile("org.springframework.boot:spring-boot-starter-web:${springVersion}")
