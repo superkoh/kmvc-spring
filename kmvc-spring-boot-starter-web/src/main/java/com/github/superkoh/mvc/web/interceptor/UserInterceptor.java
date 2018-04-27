@@ -53,7 +53,8 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
           loginUser = null;
         } else {
           String deviceToken = (String) request.getAttribute(KReqAttrs.DEVICE_TOKEN);
-          if (null != loginUser.getDeviceToken() && !deviceToken.equals(loginUser.getDeviceToken())) {
+          if (null != loginUser.getDeviceToken() && !deviceToken
+              .equals(loginUser.getDeviceToken())) {
             loginUser = null;
           }
         }
@@ -65,11 +66,13 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
 
     HandlerMethod handlerMethod = (HandlerMethod) handler;
     if (null == loginUser) {
-      if (handlerMethod.getMethod().isAnnotationPresent(LoginRequired.class)) {
+      if (handlerMethod.getMethod().isAnnotationPresent(LoginRequired.class) || handlerMethod
+          .getClass().isAnnotationPresent(LoginRequired.class)) {
         throw new NotLoginException();
       }
     } else {
-      if (handlerMethod.getMethod().isAnnotationPresent(GuestRequired.class)) {
+      if (handlerMethod.getMethod().isAnnotationPresent(GuestRequired.class) || handlerMethod
+          .getClass().isAnnotationPresent(GuestRequired.class)) {
         throw new NeedGuestException();
       }
     }
