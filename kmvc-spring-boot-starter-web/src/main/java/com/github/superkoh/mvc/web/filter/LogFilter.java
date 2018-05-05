@@ -108,7 +108,13 @@ public class LogFilter implements Filter {
             .replaceAll("\\r\\n", "")
             .replaceAll("\\n", "")
             .replaceAll("\"password\":\"[^\"]*\"",
-                "\"password\":\"******\"");
+                "\"password\":\"******\"")
+            .replaceAll("\"pwd\":\"[^\"]*\"",
+                "\"pwd\":\"******\"")
+            .replaceAll("\"[^\"]+Password\":\"[^\"]*\"",
+                "\"***Password\":\"******\"")
+            .replaceAll("\"[^\"]+Pwd\":\"[^\"]*\"",
+                "\"***Pwd\":\"******\"");
         addLogKV(accessLogBuilder, "body", body);
       }
       if (isPost || accessLogger.isDebugEnabled()) {
