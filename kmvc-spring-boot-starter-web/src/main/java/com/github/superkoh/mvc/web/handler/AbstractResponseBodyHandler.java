@@ -20,7 +20,7 @@ abstract public class AbstractResponseBodyHandler implements ResponseBodyAdvice<
   @Override
   public boolean supports(MethodParameter returnType,
       Class<? extends HttpMessageConverter<?>> converterType) {
-    return true;
+    return BizRes.class.isAssignableFrom(returnType.getParameterType());
   }
 
   @Override
