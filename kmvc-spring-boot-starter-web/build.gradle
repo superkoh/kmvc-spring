@@ -12,7 +12,7 @@ dependencies {
     compile('commons-io:commons-io:2.5')
 
 
-    compile group: 'org.apache.shiro', name: 'shiro-spring', version: '1.4.0'
+//    compile group: 'org.apache.shiro', name: 'shiro-spring', version: '1.4.0'
 
 
     testCompile("org.springframework.boot:spring-boot-starter-test:${springVersion}")

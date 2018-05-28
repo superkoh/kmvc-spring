@@ -2,6 +2,7 @@ package com.github.superkoh.mvc.web.security;
 
 import java.time.Instant;
 
+@Deprecated
 public interface LoginUser {
 
   Long getId();
