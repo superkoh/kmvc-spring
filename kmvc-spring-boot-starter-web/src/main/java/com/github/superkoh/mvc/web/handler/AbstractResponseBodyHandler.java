@@ -1,10 +1,9 @@
 package com.github.superkoh.mvc.web.handler;
 
 import com.github.superkoh.mvc.config.profile.KProfiles;
-import com.github.superkoh.mvc.web.constant.KHttpHeaders;
-import com.github.superkoh.mvc.web.response.BizRes;
-import com.github.superkoh.mvc.web.response.ErrorRes;
-import com.github.superkoh.mvc.web.response.SuccessRes;
+import com.github.superkoh.mvc.web.response.BizResp;
+import com.github.superkoh.mvc.web.response.BizRespWrapper;
+import com.github.superkoh.mvc.web.response.SuccessResp;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -15,30 +14,21 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 
 @Profile(KProfiles.RT_WEB)
-abstract public class AbstractResponseBodyHandler implements ResponseBodyAdvice<BizRes> {
+abstract public class AbstractResponseBodyHandler implements ResponseBodyAdvice<BizResp> {
 
   @Override
   public boolean supports(MethodParameter returnType,
       Class<? extends HttpMessageConverter<?>> converterType) {
-    return BizRes.class.isAssignableFrom(returnType.getParameterType());
+    return BizResp.class.isAssignableFrom(returnType.getParameterType());
   }
 
   @Override
-  public BizRes beforeBodyWrite(BizRes body, MethodParameter returnType,
+  public BizResp beforeBodyWrite(BizResp body, MethodParameter returnType,
       MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType,
       ServerHttpRequest request, ServerHttpResponse response) {
-    String deviceToken = response.getHeaders().getFirst(KHttpHeaders.X_DEVICE_TOKEN);
-    if (body instanceof ErrorRes) {
-      ((ErrorRes) body).setVd(deviceToken);
+    if (body instanceof BizRespWrapper) {
       return body;
     }
-    if (body instanceof SuccessRes) {
-      ((SuccessRes) body).setVd(deviceToken);
-      return body;
-    }
-    SuccessRes res = new SuccessRes();
-    res.setObj(body);
-    res.setVd(deviceToken);
-    return res;
+    return new SuccessResp(body);
   }
 }

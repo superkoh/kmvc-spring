@@ -12,19 +12,12 @@ public class Page extends BaseObject {
   private int pageNo;
   private String orderBy;
 
-  @Deprecated
-  private int offset;
-  @Deprecated
-  private int limit;
-
   public Page() {
   }
 
   public Page(int pageSize, int pageNo) {
     this.pageSize = pageSize;
     this.pageNo = pageNo;
-//    this.limit = this.pageSize;
-//    this.offset = (this.pageNo - 1) * this.pageSize;
   }
 
   public Page(int pageSize, int pageNo, String orderBy) {

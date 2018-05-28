@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-public class CommonInterceptor extends HandlerInterceptorAdapter {
+public class DeviceTokenInterceptor extends HandlerInterceptorAdapter {
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -25,6 +25,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
       deviceToken = UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
       KHttpUtils.setDeviceTokenCookie(response, deviceToken);
     }
+    response.setHeader(KHttpHeaders.X_DEVICE_TOKEN, deviceToken);
     request.setAttribute(KReqAttrs.DEVICE_TOKEN, deviceToken);
     return super.preHandle(request, response, handler);
   }

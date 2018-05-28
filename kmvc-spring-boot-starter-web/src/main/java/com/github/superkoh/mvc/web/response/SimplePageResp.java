@@ -10,24 +10,24 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SimplePageRes<T extends BizRes> extends ListRes<T> {
+public class SimplePageResp<T extends BizResp> extends ListResp<T> {
 
-  private Integer pageSize;
-  private Integer pageNo;
+  private int pageSize;
+  private int pageNo;
 
-  public SimplePageRes(List<T> list, Integer pageSize, Integer pageNo) {
+  public SimplePageResp(List<T> list, int pageSize, int pageNo) {
     super(list);
     this.pageSize = pageSize;
     this.pageNo = pageNo;
   }
 
-  public <I> SimplePageRes(SimplePageList<I> pageList, Function<? super I, ? extends T> mapper) {
+  public <I> SimplePageResp(SimplePageList<I> pageList, Function<? super I, ? extends T> mapper) {
     this(pageList.getList().stream().map(mapper).collect(Collectors.toList()),
         pageList.getPageSize(),
         pageList.getPageNo());
   }
 
-  public <I> SimplePageRes(SimplePageList<I> pageList, Predicate<? super I> filter,
+  public <I> SimplePageResp(SimplePageList<I> pageList, Predicate<? super I> filter,
       Function<? super I, ? extends T> mapper) {
     this(pageList.getList().stream().filter(filter).map(mapper).collect(Collectors.toList()),
         pageList.getPageSize(),

@@ -57,18 +57,4 @@ public class KHttpUtils {
     cookie.setMaxAge(36000000);
     response.addCookie(cookie);
   }
-
-  public static void setLoginTokenCookie(HttpServletResponse response, String token, int expire) {
-    Cookie cookie = new Cookie(KCookies.TOKEN_KEY, token);
-    cookie.setPath("/");
-    cookie.setMaxAge(expire);
-    response.addCookie(cookie);
-  }
-
-  public static void clearLoginTokenCookie(HttpServletResponse response) {
-    Cookie cookie = new Cookie(KCookies.TOKEN_KEY, null);
-    cookie.setPath("/");
-    cookie.setMaxAge(0);
-    response.addCookie(cookie);
-  }
 }

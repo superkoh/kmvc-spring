@@ -5,6 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.github.superkoh.mvc.lang.BaseObject;
 
 @JsonInclude(Include.NON_ABSENT)
-public class BizRes extends BaseObject {
+public class BizResp extends BaseObject {
 
 }

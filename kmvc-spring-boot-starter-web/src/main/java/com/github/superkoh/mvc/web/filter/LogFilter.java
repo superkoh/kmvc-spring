@@ -1,7 +1,6 @@
 package com.github.superkoh.mvc.web.filter;
 
 import com.github.superkoh.mvc.web.constant.KReqAttrs;
-import com.github.superkoh.mvc.web.security.LoginUser;
 import com.github.superkoh.mvc.web.utils.KHttpUtils;
 import java.io.IOException;
 import java.time.Instant;
@@ -89,13 +88,6 @@ public class LogFilter implements Filter {
       String deviceToken = (String) request.getAttribute(KReqAttrs.DEVICE_TOKEN);
       if (null != deviceToken) {
         addLogKV(accessLogBuilder, "vd", deviceToken);
-      }
-      LoginUser loginUser = (LoginUser) request.getAttribute(KReqAttrs.LOGIN_USER);
-      if (null != loginUser) {
-        addLogKV(accessLogBuilder, "user", String.valueOf(loginUser.getId()));
-        addLogKV(accessLogBuilder, "token", loginUser.getToken());
-        addLogKV(accessLogBuilder, "tokenExpireTime", loginUser.getTokenExpireTime().toString());
-
       }
       addLogKV(accessLogBuilder, "params", parseParams(wrapperRequest.getParameterMap()));
       boolean isPost = "POST".equalsIgnoreCase(wrapperRequest.getMethod());

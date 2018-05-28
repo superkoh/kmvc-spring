@@ -8,9 +8,15 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(Include.NON_ABSENT)
 @Data
-public class SuccessRes extends BizRes {
+abstract public class BizRespWrapper extends BizResp {
 
-  private int ok = 0;
-  private BizRes obj;
-  private String vd;
+  private int ok;
+  private BizResp obj;
+  private String msg;
+
+  public BizRespWrapper(int ok, BizResp obj, String msg) {
+    this.ok = ok;
+    this.obj = obj;
+    this.msg = msg;
+  }
 }

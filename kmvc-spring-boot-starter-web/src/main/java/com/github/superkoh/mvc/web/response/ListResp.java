@@ -6,11 +6,11 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ListRes<T extends BizRes> extends BizRes {
+public class ListResp<T extends BizResp> extends BizResp {
 
   private List<T> list;
 
-  public ListRes(List<T> list) {
+  public ListResp(List<T> list) {
     this.list = list;
   }
 }
