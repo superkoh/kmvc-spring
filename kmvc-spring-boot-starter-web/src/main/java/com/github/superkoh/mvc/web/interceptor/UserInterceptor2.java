@@ -9,8 +9,6 @@ import com.github.superkoh.mvc.web.exception.NeedGuestException;
 import com.github.superkoh.mvc.web.exception.NotLoginException;
 import com.github.superkoh.mvc.web.security.LoginUser;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,12 +16,11 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.WebUtils;
 
-@Deprecated
-public class UserInterceptor extends HandlerInterceptorAdapter {
+public class UserInterceptor2 extends HandlerInterceptorAdapter {
 
   private LoginUserService loginUserService;
 
-  public UserInterceptor(LoginUserService loginUserService) {
+  public UserInterceptor2(LoginUserService loginUserService) {
     this.loginUserService = loginUserService;
   }
 
@@ -40,29 +37,46 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
         token = tokenCookie.getValue();
       }
     }
-    LoginUser loginUser = null;
+    Long loginUserId = null;
     if (null != token) {
-      loginUser = loginUserService.getLoginUserByToken(token);
-      if (null != loginUser) {
-        if (loginUser.getTokenExpireTime().isBefore(Instant.now())) {
-          loginUser = null;
-        } else {
-          String deviceToken = (String) request.getAttribute(KReqAttrs.DEVICE_TOKEN);
-          if (null != loginUser.getDeviceToken() && !deviceToken
-              .equals(loginUser.getDeviceToken())) {
-            loginUser = null;
-          }
-        }
-      }
-      if (null != loginUser) {
+      String deviceToken = (String) request.getAttribute(KReqAttrs.DEVICE_TOKEN);
+      loginUserId = loginUserService.checkLoginUserToken(token, deviceToken);
+      if (null != loginUserId) {
         request.setAttribute(KReqAttrs.LOGIN_USER_TOKEN, token);
-        request.setAttribute(KReqAttrs.LOGIN_USER_ID, loginUser.getId());
-        request.setAttribute(KReqAttrs.LOGIN_USER, loginUser);
+        request.setAttribute(KReqAttrs.LOGIN_USER_ID, loginUserId);
+        String finalToken = token;
+        Long finalLoginUserId = loginUserId;
+        request.setAttribute(KReqAttrs.LOGIN_USER, new LoginUser() {
+          @Override
+          public Long getId() {
+            return finalLoginUserId;
+          }
+
+          @Override
+          public String getUsername() {
+            throw new UnsupportedOperationException();
+          }
+
+          @Override
+          public String getToken() {
+            return finalToken;
+          }
+
+          @Override
+          public String getDeviceToken() {
+            return deviceToken;
+          }
+
+          @Override
+          public Instant getTokenExpireTime() {
+            throw new UnsupportedOperationException();
+          }
+        });
       }
     }
 
     HandlerMethod handlerMethod = (HandlerMethod) handler;
-    if (null == loginUser) {
+    if (null == loginUserId) {
       if (handlerMethod.getMethod().isAnnotationPresent(LoginRequired.class) || handlerMethod
           .getClass().isAnnotationPresent(LoginRequired.class)) {
         throw new NotLoginException();

@@ -11,16 +11,25 @@ abstract public class BaseController {
   @Autowired(required = false)
   private HttpServletRequest request;
 
-  protected Boolean isLogin() {
-    return null != request.getAttribute(KReqAttrs.LOGIN_USER);
+  protected boolean isLogin() {
+    return null != request.getAttribute(KReqAttrs.LOGIN_USER_ID);
   }
 
+  @Deprecated
   protected LoginUser getLoginUser() {
     return (LoginUser) request.getAttribute(KReqAttrs.LOGIN_USER);
   }
 
   protected String getDeviceToken() {
     return (String) request.getAttribute(KReqAttrs.DEVICE_TOKEN);
+  }
+
+  protected Long getCurrentUserId() {
+    return (Long) request.getAttribute(KReqAttrs.LOGIN_USER_ID);
+  }
+
+  protected String getCurrentUserToken() {
+    return (String) request.getAttribute(KReqAttrs.LOGIN_USER_TOKEN);
   }
 
   protected String getRemoteIp() {

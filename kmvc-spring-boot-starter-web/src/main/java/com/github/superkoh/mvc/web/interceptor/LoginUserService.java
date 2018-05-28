@@ -5,7 +5,17 @@ import javax.validation.constraints.NotBlank;
 
 public interface LoginUserService {
 
-  LoginUser getLoginUserByToken(@NotBlank String token);
+  @Deprecated
+  default LoginUser getLoginUserByToken(@NotBlank String token) {
+    return null;
+  }
 
-  String getUserType();
+  @Deprecated
+  default String getUserType() {
+    return "user";
+  }
+
+  default Long checkLoginUserToken(@NotBlank String token, @NotBlank String deviceToken) {
+    return null;
+  }
 }
